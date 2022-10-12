@@ -16,3 +16,4 @@ select custid, count(*) as '총 수량', sum(saleprice) as '총 판매액' from 
 select custid, count(*) as '총 수량', sum(saleprice) as '총 판매액' from orders group by custid having saleprice >= 30000;
 /* 가격이 8,000원 이상인 도서를 구매한 고객에 대하여 고객별 주문 도서의 총수량을 구하시오. 단, 두 권 이상 구매한 고객만 구한다. */
 select custid, count(*) as '총수량', sum(saleprice) from orders where saleprice >= 8000 group by custid having count(*) >=2 order by custid;
+
