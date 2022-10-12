@@ -1,0 +1,63 @@
+릴레이션 관련 자주 쓰는 용어들 :
+테이블  스키마 행 열 레코드 필드
+
+슈퍼키 = 프라이머리 키
+후보키 중에서 슈퍼키(식별될 수 있는 집합), 기본키(식별할 수 있는 대표키)를 고르는 것
+대리키(슈퍼키 대신 임의로 만들어서 구별하는 키)를 사용할 수도 있다. (이 경우가 더 흔함)
+(인조키 혹은 인공키 라고도 함)
+대체키 : 후보키 중에서 기본키로 선정되지 않은키 -> 나중에 인덱스로 활용될 수도 있다.
+외래키 : 다른 릴레이션의 기본키를 참조하는 속성 (NULL값, 중복값 허용)
+
+원래는 서비스 -> mysql80을 일일이 실행해줘야함(시작유형으로 자동으로 바꿔라)
+환경변수 설정 해야함(책 뒷면 참고)
+
+mysql -u root -p
+show databases;
+use test:
+show tables:
+
+프라이머리는 항상 NN(Not Null))
+VARCHAR - 가변길이
+CHAR - 고정길이
+
+SQL(Structured Query Language)
+• 데이터 정의어(DDL, Data Definition Language)
+• 데이터 조작어(DML, Data Manipulation Language)
+• 데이터 제어어(DCL, Data Control Language)
+자세한건 3주차 23page 참조
+
+
+MYSQL syntex
+select publisher, price from book where bookname = '축구의 역사';     -> 정확하게
+select publisher, price from book where bookname like '축구의 역사';   -> 비슷한거
+select bookname, publisher, price from book where bookname like '%축구%'; -> 축구라는 단어가 나오는 것
+
+https://dev.mysql.com/doc/refman/8.0/en/tutorial.html -> 참고 사이트
+https://dev.mysql.com/doc/refman/8.0/en/select.html -> select 기본 문법
+having group by로 나온 직계 검색조건 표시
+
+distinct -> 중복제거
+all       ->중복 제거x
+
+‘*’ ->모든 내용 다 보여주기
+
+<> = !
+between은 자기 자신도 포함
+select * from customer where phone is NULL; (o)
+select * from customer where phone = NULL; (x);
+
+select bookname from book where publisher not in ('굿스포츠' '대한미디어');
+= select bookname from book where (publisher <> '굿스포츠') and (publisher <> '대한미디어');
+select bookname, price, publisher from book where publisher in('나우수', '이상미디어');
+= select bookname, price, publisher from book where (publisher='나무수') or (publisher = '이상미디어');
+
+예약어는 뭐지? 컴퓨터 프로그래밍 언어에서 
+이미 문법적인 용도로 사용되고 있기 때문에 식별자로 사용할 수 없는 단어들이다
+
+설명1. 직계함수는 where절에 쓸 수 x(having절에 써야한다.) where절에는 원래 데이터베이스의 내용만 적을 수 있다.
+
+설명2. Having 은 group by 절의 결과 나타나는 그룹을 제한하는 역할을 한다.
+즉 그룹에 대한 조건은 WHERE 가 아닌 HAVING 키워드와 함께 작성한다.
+(where은 그룹지기 전 조건)
+
+*에러 메시지 확인시 Action Output -> Copy Response하고 메모장에 복붙
