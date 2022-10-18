@@ -144,6 +144,9 @@ select name, saleprice from customer c left outer join orders o on c.custid = o.
 select name, address from customer where address like '대한민국%'
 union
 select name, address from customer where custid in (1,2,3,4);
+select name, address from customer where address like '대한민국%'      /* 위에 거랑 같은거 */
+union
+select name, address from customer c, orders o where c.custid = o.custid;
 
 /* 서브쿼리 */
 select max(price) from book; /* 1번 */
@@ -181,11 +184,16 @@ select max(price - saleprice) as diff from book b inner join orders o on b.booki
 select *, (price - saleprice) as diff from orders o inner join book b on b.bookid = o.bookid where (price - saleprice) = (select max(price - saleprice) as diff from book b inner join orders o on b.bookid = o.bookid);
 -- (13) 도서의 판매액 평균보다 자신의 구매액 평균이 더 높은 고객의 이름
 
+/* 대한민국에서 거주하는 고객의 이름에서 도서를 주문한 고객의 이름 빼고 보이시오 */ 
+select name from customer c left join orders o on c.custid = o.custid where address like '대한민국%' and o.custid is null;
+select name from customer where address like '대한민국%' and custid not in (select distinct custid from orders);
+select name from customer c where address like '대한민국%' and c.custid not in (select c.custid from orders o where o.custid = c.custid); /* 상관 서브쿼리로 변환한 것 */
 
-/* scalar subquery */
-select c.custid,
-		(select name from customer where custid=1) as name,
-		sum(saleprice) as total
-from customer c inner join orders o
-on c.custid = o.custid
-where o.custid = 1;
+/* 질의 3-33 주문이 하나라도 있는 고객의 이름과 주소를 보이시오. */
+select name, address from customer c where exists (select * from orders o where c.custid = o.custid);
+select name, address from customer c where c.custid in (select custid from orders o);
+select distinctname, address from customer c inner join orders o on c.custid = o.custid;
+
+select * from book where price > (select avg(price) from book);
+/* 책이 판매된 적이 있으면 = any */
+select * from book where bookid = any (select distinct bookid from orders);
